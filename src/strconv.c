@@ -76,15 +76,19 @@ int jsonp_strtod(strbuffer_t *strbuffer, double *out) {
     return 0;
 }
 
-int jsonp_dtostr(char *buffer, size_t size, double value, int precision) {
+int jsonp_dtostr(char *buffer, size_t size, double value, uint8_t precision) {
     int ret;
     char *start, *end;
     size_t length;
 
-    if (precision == 0)
-        precision = 17;
+    if (precision > 0) {
+        char match[32] = {0};
+        snprintf(match, sizeof(match), "%%.%dlf", precision);
+        ret = snprintf(buffer, size, match, value);
+    } else {
+        ret = snprintf(buffer, size, "%.*g", 16, value);
+    }
 
-    ret = snprintf(buffer, size, "%.*g", precision, value);
     if (ret < 0)
         return -1;
 

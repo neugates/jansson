@@ -100,6 +100,7 @@ json_t *json_string_nocheck(const char *value);
 json_t *json_stringn_nocheck(const char *value, size_t len);
 json_t *json_integer(json_int_t value);
 json_t *json_real(double value);
+json_t *json_realp(double value, uint8_t precision);
 json_t *json_true(void);
 json_t *json_false(void);
 #define json_boolean(val) ((val) ? json_true() : json_false())
@@ -312,6 +313,7 @@ const char *json_string_value(const json_t *string);
 size_t json_string_length(const json_t *string);
 json_int_t json_integer_value(const json_t *integer);
 double json_real_value(const json_t *real);
+uint8_t json_real_precision(const json_t *real);
 double json_number_value(const json_t *json);
 
 int json_string_set(json_t *string, const char *value);

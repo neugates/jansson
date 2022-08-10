@@ -940,6 +940,23 @@ json_t *json_real(double value) {
     json_init(&real->json, JSON_REAL);
 
     real->value = value;
+    real->precision = 0;
+    return &real->json;
+}
+
+json_t *json_realp(double value, uint8_t precision) {
+    json_real_t *real;
+
+    if (isnan(value) || isinf(value))
+        return NULL;
+
+    real = jsonp_malloc(sizeof(json_real_t));
+    if (!real)
+        return NULL;
+    json_init(&real->json, JSON_REAL);
+
+    real->value = value;
+    real->precision = precision;
     return &real->json;
 }
 
@@ -948,6 +965,13 @@ double json_real_value(const json_t *json) {
         return 0;
 
     return json_to_real(json)->value;
+}
+
+uint8_t json_real_precision(const json_t *json) {
+    if (!json_is_real(json))
+        return 0;
+
+    return json_to_real(json)->precision;
 }
 
 int json_real_set(json_t *json, double value) {
